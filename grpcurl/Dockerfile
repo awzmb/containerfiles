@@ -1,4 +1,4 @@
-FROM docker.io/golang:latest AS build
+FROM docker.io/golang:1.25.1-trixie@sha256:61226c61f37cb86253c4ac486ef22c47f14bfddb8f60bb4805bfc165001be758 AS build
 
 RUN git clone https://github.com/fullstorydev/grpcurl.git /go/src/grpcurl
 
@@ -8,7 +8,7 @@ RUN go mod tidy
 
 RUN CGO_ENABLED=0 GOOS=$(uname | tr '[A-Z]' '[a-z]') go build -o /go/bin/grpcurl
 
-FROM gcr.io/distroless/static-debian12
+FROM gcr.io/distroless/static-debian12:latest@sha256:87bce11be0af225e4ca761c40babb06d6d559f5767fbf7dc3c47f0f1a466b92c
 
 COPY --from=build /go/bin/grpcurl /usr/local/bin
 COPY --from=kubectl /usr/bin/kubectl /usr/bin
