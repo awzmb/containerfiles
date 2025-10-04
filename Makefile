@@ -1,17 +1,14 @@
-# Define the directory containing the containerfiles
-CONTAINERFILES_DIR := .
+# Get all subdirectories with a Containerfile
+DIRS := $(wildcard */Containerfile)
 
-# Find all containerfiles in the directory
-CONTAINERFILES := $(wildcard $(CONTAINERFILES_DIR)/*.containerfile)
-
-# Extract the names before .containerfile
-IMAGES := $(patsubst %.containerfile,%,$(notdir $(CONTAINERFILES)))
+# Extract the names of the directories
+IMAGES := $(patsubst %/Containerfile,%,$(DIRS))
 
 # Default target to build all images
 all: $(IMAGES)
 
 # Rule to build each image
 $(IMAGES):
-	podman buildx build --tag $@ -f $(CONTAINERFILES_DIR)/$@.containerfile
+	podman buildx build --tag $@ -f $@/Containerfile $@
 
 .PHONY: all $(IMAGES)

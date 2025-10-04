@@ -6,9 +6,7 @@ WORKDIR /go/src/grpcurl
 
 RUN go mod tidy
 
-RUN CGO_ENABLED=0 GOOS=$(uname | tr '[A-Z]' '[a-z]') go build -o /go/bin/grpcurl \
-    -ldflags "-w -extldflags \"-static\" \
-    ./cmd/grpcurl
+RUN CGO_ENABLED=0 GOOS=$(uname | tr '[A-Z]' '[a-z]') go build -o /go/bin/grpcurl
 
 FROM gcr.io/distroless/static-debian12
 
