@@ -9,7 +9,7 @@ all: $(IMAGES)
 
 # Rule to build each image
 $(IMAGES):
-	podman buildx build --tag $@ -f $@/Dockerfile $@
+	podman buildx build --build-arg "USERNAME=$$(whoami)" --build-arg "USER_ID=$$(id -u)" --build-arg "GROUP_ID=$$(id -g)" --tag $@ -f $@/Dockerfile $@
 
 .PHONY: all $(IMAGES)
 

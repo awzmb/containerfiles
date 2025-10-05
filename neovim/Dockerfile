@@ -11,6 +11,7 @@ RUN \
   # --- Core Development Tools ---
   base-devel \
   ctags \
+  cmake \
   curl \
   fd \
   fzf \
@@ -25,6 +26,7 @@ RUN \
   ripgrep \
   unzip \
   wget \
+  wl-clipboard \
   yq \
   zsh \
   # --- Language Support: Java ---
@@ -35,12 +37,16 @@ RUN \
   yarn \
   # --- Language Support: Lua (for Neovim) ---
   luacheck \
+  luarocks \
   # --- Language Support: Python ---
   python \
   python-pip \
   # --- Language Support: Rust ---
-  # We install rustup to manage the toolchain, which is more flexible.
   rustup \
+  rust-analyzer \
+  # --- Language Support: Golang ---
+  go \
+  gopls \
   # Clean up package cache to keep the image small
   && pacman -Scc --noconfirm
 
@@ -50,31 +56,39 @@ RUN \
 # NOTE: If running into problems, check your current UID/GID with `id -u` and `id -g`
 ARG USER_ID=1000
 ARG GROUP_ID=1000
-RUN groupadd --gid $GROUP_ID dev && \
-  useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/zsh dev
+ARG USERNAME=dev
+RUN groupadd --gid $GROUP_ID ${USERNAME} && \
+  useradd --uid $USER_ID --gid $GROUP_ID -m -s /bin/zsh ${USERNAME}
 
 # Switch to the new user
-USER dev
-WORKDIR /home/dev
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}
 
-# Layer 3: Configure User Environment (Git, Rust)
+# Configure User Environment (Git, Rust)
 RUN \
-  # Configure git alias for the 'dev' user
+  # Configure git alias for the user
   git config --global alias.graph "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'" && \
   # Install the default Rust toolchain using rustup
   rustup default stable
 
 # Add Rust's cargo bin to the PATH
-ENV PATH="/home/dev/.cargo/bin:${PATH}"
+ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 
-# Layer 4: Pre-install Neovim plugins
+# Pre-install Neovim plugins
 # This is the magic step. We copy the config and run the plugin manager headlessly.
 # IMPORTANT: This assumes your nvim config is in a directory named '.config/nvim'
 #            in the same directory as this Dockerfile when you build.
-ADD --chown=dev:dev https://raw.githubusercontent.com/awzmb/wmconfig/refs/heads/master/.config/nvim/init.lua /home/dev/.config/nvim/init.lua
+ADD --chown=${USERNAME}:${USERNAME} https://raw.githubusercontent.com/awzmb/wmconfig/refs/heads/master/.config/nvim/init.lua /home/${USERNAME}/.config/nvim/init.lua
+
+# Install lazy.nvim plugin manager
+RUN git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable /home/${USERNAME}/.local/share/nvim/lazy/lazy.nvim
 
 # Install plugins using lazy.nvim
-RUN nvim --headless "+Lazy! sync" +qa
+RUN nvim --headless "+Lazy! sync" "+Mason" "+qa"
+
+# Install Mason packages
+# RUN nvim --headless +"lua require('nvchad.mason').install_all()" +"autocmd User MasonUpdateAllComplete qa"
+RUN nvim --headless -c "MasonInstall lua-language-server rust-analyzer helm-ls terraform-ls pyright gopls yaml-language-server dockerfile-language-server json-lsp bash-language-server tflint tfsec luacheck kube-linter hclfmt" -c qall
 
 # Set the default working directory for the container
 WORKDIR /workspace
