@@ -22,7 +22,7 @@ RUN ARCH=$(uname -m) && \
   mv /download/aichat /usr/local/bin && \
   chmod +x /usr/local/bin/aichat
 
-FROM gcr.io/distroless/cc:latest@sha256:14f6999db515330e5d00537bd457289a8968b6456e9197c7a28101ee63a7522f
+FROM gcr.io/distroless/cc:latest@sha256:0000f9dc0290f8eaf0ecceafbc35e803649087ea7879570fbc78372df7ac649b
 
 COPY --from=build /usr/local/bin/aichat /bin/aichat
 
