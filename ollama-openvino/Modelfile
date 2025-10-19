@@ -1,0 +1,3 @@
+FROM /home/openvino/Qwen3-8B-int4-sym-ov-npu.tar.gz
+modeltype "OpenVINO"
+inferdevice "NPU"
