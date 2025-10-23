@@ -1,4 +1,4 @@
-FROM docker.io/hashicorp/terraform:1.13.3@sha256:dfb1889a8ee74ada3ddacc48f89b8a0d69f3e114de3d8a2ce15f6a8d3dbfdbe2 AS terraform
+FROM docker.io/hashicorp/terraform:1.13.4@sha256:eebc943e69008b6d6d986800087164274d8c92d83db8d53fb9baa4ccff309884 AS terraform
 FROM docker.io/cytopia/terraform-docs:0.20.0@sha256:c1b894923ac72e64780d9464245090c98cb3800e9c98c36181d32d9c49d3a30c AS terraform-docs
 
 FROM python:3.14.0rc3-slim-trixie@sha256:e1bb3adc44d158b8b37d647dbfa5864b74f387552c5f12abe9cc95ae773b7c69 AS build

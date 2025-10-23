@@ -22,7 +22,7 @@ RUN chmod +x /tmp/install-k9s.sh && /tmp/install-k9s.sh
 #
 # RUN CGO_ENABLED=0 GOOS=$(uname | tr '[A-Z]' '[a-z]') go build -a -o /go/bin/k9s main.go
 
-FROM cgr.dev/chainguard/kubectl:latest@sha256:0457c2835c01a138ede1fba3eb36c218f2e1504233ff2f2fe2f889d30db6c90a as kubectl
+FROM cgr.dev/chainguard/kubectl:latest@sha256:bb1770e01601f4e1b053411030c51e419643625d4535b87054042517dcc2b878 as kubectl
 
 FROM gcr.io/distroless/static-debian12:latest@sha256:87bce11be0af225e4ca761c40babb06d6d559f5767fbf7dc3c47f0f1a466b92c
 

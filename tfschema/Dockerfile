@@ -1,4 +1,4 @@
-FROM docker.io/golang:1.25.3@sha256:2e3aca25948111e2a3e4acd66b5c5abebecdea6a434eead036152631e4d0b3a0 AS build
+FROM docker.io/golang:1.25.3@sha256:8c945d3e25320e771326dafc6fb72ecae5f87b0f29328cbbd87c4dff506c9135 AS build
 
 RUN git clone https://github.com/minamijoyo/tfschema.git /go/src/tfschema
 

@@ -1,4 +1,4 @@
-FROM docker.io/golang:1.25.3-trixie@sha256:88ba6af1b83398ee93c4753b7f746bd979ce369d759a058c80667c46db6341ff AS build
+FROM docker.io/golang:1.25.3-trixie@sha256:83defe6e67782eefe60d5cd3241d2f2ffee05d27ffa9c953caa1d21cc8f4304b AS build
 
 RUN git clone https://github.com/fullstorydev/grpcurl.git /go/src/grpcurl
 
