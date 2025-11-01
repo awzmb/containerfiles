@@ -12,7 +12,7 @@ ADD ./install-k9s.sh /tmp/install-k9s.sh
 
 RUN chmod +x /tmp/install-k9s.sh && /tmp/install-k9s.sh
 
-FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:544.0.0-stable@sha256:d1ccfc3d02db16a9d7c33cccc3c6265f6f67ab6d9b4862f4e0df0b7d09a1f03d
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:545.0.0-stable@sha256:3f8d865cc48811eff6162f8c9ce844da1d042182848e9a447cfd7e9c7c06455b
 
 COPY --from=build /usr/local/bin/k9s /usr/local/bin/k9s
 
